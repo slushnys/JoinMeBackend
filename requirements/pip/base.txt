@@ -1,0 +1,10 @@
+Django==1.8.5
+Markdown==2.6.3
+Pygments==2.0.2
+argparse==1.2.1
+django-filter==0.11.0
+djangorestframework==3.3.0
+hashtag==0.1
+psycopg2==2.6.1
+uuid==1.30
+wsgiref==0.1.2
