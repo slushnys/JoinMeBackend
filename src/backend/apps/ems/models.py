@@ -11,9 +11,11 @@ class Event(models.Model):
     description = models.TextField()
     status = models.IntegerField()
     location = models.ForeignKey('Location', null=True)
-    datetime = models.DateTimeField()
-    begin_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    owner = models.ForeignKey(Account, null=True)
+    created = models.DateTimeField(auto_now=True, null=True)
+    modified = models.DateTimeField(auto_now=True, null=True)
+    begin_time = models.DateTimeField(null=False)
+    end_time = models.DateTimeField(null=False)
 
 
 class Participants(models.Model):
@@ -34,8 +36,8 @@ class Location(models.Model):
     postcode = models.CharField(max_length=6, null=True)
     country = models.CharField(max_length=50)
     city = models.CharField(max_length=50)
-    longitude = models.FloatField()
-    latitude = models.FloatField()
+    longitude = models.FloatField(null=False)
+    latitude = models.FloatField(null=False)
     state = models.CharField(max_length=50, null=True)
 
 # class Rule(models.Model):

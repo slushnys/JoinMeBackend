@@ -1,6 +1,6 @@
 *.pyc
-bin/
-include/
-lib/
-local/
+/bin/
+/include/
+/lib/
+/local/
 .idea/

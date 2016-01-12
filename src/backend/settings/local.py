@@ -38,6 +38,12 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'backend.apps.ems',
+    'backend.apps.crm',
+    'backend.apps.hashtags',
+    'oauth2_provider',
+    'social.apps.django_app.default',
+    'rest_framework_social_oauth2',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -64,6 +70,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'social.apps.django_app.context_processors.backends',
+                'social.apps.django_app.context_processors.login_redirect',
             ],
         },
     },
@@ -71,6 +80,40 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
+        'rest_framework_social_oauth2.authentication.SocialAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES':
+        (
+            # 'oauth2_provider.ext.rest_framework.TokenHasScope',
+        )
+}
+
+AUTHENTICATION_BACKENDS = (
+   # Facebook OAuth2
+    'social.backends.facebook.FacebookAppOAuth2',
+    'social.backends.facebook.FacebookOAuth2',
+
+    # django-rest-framework-social-oauth2
+    'rest_framework_social_oauth2.backends.DjangoOAuth2',
+
+    # Django
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_FACEBOOK_KEY = '193207894363008'
+# SOCIAL_AUTH_FACEBOOK_KEY = '161932934157171'
+SOCIAL_AUTH_FACEBOOK_SECRET = '660848dc9ca623c9b80e356bd2081d1f'
+# SOCIAL_AUTH_FACEBOOK_SECRET = 'c9941915e243207ab0bbcd08cec58bee'
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
+# Define SOCIAL_AUTH_FACEBOOK_SCOPE to get extra permissions from facebook. Email is not sent by default, to get it, you must request the email permission:
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['id', 'email', 'user_about_me', 'user_friends', 'user_likes', 'user_events',]
+
+PROPRIETARY_BACKEND_NAME = ('Facebook',)
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
@@ -110,3 +153,25 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# ------------------------------------
+# CORS HEADERS
+# ------------------------------------
+USE_ETAGS = False
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = False
+CORS_URLS_REGEX = r'^/api/.*$'
+
+
+# AUTH_USER_MODEL = 'backend.apps.crm.models.Account'
+# AUTH_USER_MODEL = 'crm.Account'
+
+# ------------------------------------
+# OAUTH2 SETTINGS
+# ------------------------------------
+
+
+OAUTH2_PROVIDER = {
+    # this is the list of available scopes
+    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
+}

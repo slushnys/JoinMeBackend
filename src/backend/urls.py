@@ -13,7 +13,7 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
-from django.conf.urls import include, patterns
+from django.conf.urls import include, patterns, url
 from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 from backend.apps.ems.resources import EventViewSet
@@ -27,8 +27,13 @@ router.register(r'accounts', AccountViewSet)
 
 
 urlpatterns = patterns(
-    (r'^admin/', include(admin.site.urls)),
-    (r'^api/v1/', include(router.urls, namespace='v1')),
+
     (r'^api-auth/', include('rest_framework.urls',
                             namespace='rest_framework')),
+
+    (r'^admin/', include(admin.site.urls)),
+    (r'^api/v1/', include(router.urls, namespace='v1')),
+
+    url('^social', include('social.apps.django_app.urls', namespace='social')),
+    url(r'^auth/', include('rest_framework_social_oauth2.urls')),
 )
