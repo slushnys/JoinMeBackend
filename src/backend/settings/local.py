@@ -40,10 +40,13 @@ INSTALLED_APPS = (
     'rest_framework',
     'backend.apps.ems',
     'backend.apps.crm',
+    'backend.apps.lms',
     'backend.apps.hashtags',
-    'oauth2_provider',
+    # 'oauth2_provider',
     'social.apps.django_app.default',
-    'rest_framework_social_oauth2',
+    # 'rest_framework_social_oauth2',
+    # 'rest_framework.authtoken',
+    # 'django_facebook',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -67,6 +70,7 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
+                # 'django_facebook.context_processors.facebook',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -82,22 +86,26 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
-        'rest_framework_social_oauth2.authentication.SocialAuthentication',
+        'backend.apps.crm.authentication.ExpiringTokenAuthenticationSystem'
+        # 'rest_framework.authentication.TokenAuthentication',
+        # 'oauth2_provider.ext.rest_framework.OAuth2Authentication',
+        # 'rest_framework_social_oauth2.authentication.SocialAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES':
         (
             # 'oauth2_provider.ext.rest_framework.TokenHasScope',
+            'rest_framework.permissions.IsAuthenticated'
         )
 }
 
 AUTHENTICATION_BACKENDS = (
    # Facebook OAuth2
+
     'social.backends.facebook.FacebookAppOAuth2',
     'social.backends.facebook.FacebookOAuth2',
 
     # django-rest-framework-social-oauth2
-    'rest_framework_social_oauth2.backends.DjangoOAuth2',
+    # 'rest_framework_social_oauth2.backends.DjangoOAuth2',
 
     # Django
     'django.contrib.auth.backends.ModelBackend',
@@ -108,10 +116,26 @@ SOCIAL_AUTH_FACEBOOK_KEY = '193207894363008'
 SOCIAL_AUTH_FACEBOOK_SECRET = '660848dc9ca623c9b80e356bd2081d1f'
 # SOCIAL_AUTH_FACEBOOK_SECRET = 'c9941915e243207ab0bbcd08cec58bee'
 
+# facebook testing
+TEST_FACEBOOK_USER = 'rzjivmw_seligsteinsen_1467380851@tfbnw.net'
+TEST_FACEBOOK_PASSWORD = 'testuser'
+
+FACEBOOK_APP_ID = '193207894363008'
+FACEBOOK_APP_SECRET = '660848dc9ca623c9b80e356bd2081d1f'
+
+
+
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
+# SOCIAL_AUTH_USER_MODEL = 'apps.crm.models.Account'
+
+
+SOCIAL_AUTH_USER_MODEL = 'crm.Account'
+AUTH_USER_MODEL = 'crm.Account'
 
 # Define SOCIAL_AUTH_FACEBOOK_SCOPE to get extra permissions from facebook. Email is not sent by default, to get it, you must request the email permission:
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['id', 'email', 'user_about_me', 'user_friends', 'user_likes', 'user_events',]
+#SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'about', 'birthday', 'friends', 'likes', 'events',]
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['public_profile', 'email', 'user_about_me', 'user_birthday', 'user_events',]
+
 
 PROPRIETARY_BACKEND_NAME = ('Facebook',)
 
@@ -125,7 +149,8 @@ DATABASES = {
     # },
 
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'JoinMeDB',
         'USER': 'JoinMeRoot',
         'PASSWORD': 'getconnected',
@@ -171,7 +196,13 @@ CORS_URLS_REGEX = r'^/api/.*$'
 # ------------------------------------
 
 
-OAUTH2_PROVIDER = {
-    # this is the list of available scopes
-    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
-}
+# OAUTH2_PROVIDER = {
+#     # this is the list of available scopes
+#     'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
+# }
+
+#############################
+#   FACEBOOK INFORMATION    #
+#############################
+
+FACEBOOK_API_VERSION = '2.6'

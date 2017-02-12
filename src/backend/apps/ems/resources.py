@@ -1,33 +1,65 @@
-import requests
-from backend.apps.ems.models import Event, Location
-from backend.apps.ems.serializers import EventSerializer, LocationSerializer
-from oauth2_provider.ext.rest_framework import TokenHasScope, TokenHasReadWriteScope, OAuth2Authentication
+from backend.apps.crm.authentication import ExpiringTokenAuthenticationSystem
+from backend.apps.ems.models import Event, Location, Participant
+from backend.apps.ems.serializers import EventSerializer, LocationSerializer, ParticipantSerializer
 from rest_framework import viewsets
-from rest_framework_social_oauth2.authentication import SocialAuthentication
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 
 class EventViewSet(viewsets.ModelViewSet):
+    # This viewset is responsible for:
+    # Creating an event by a single user: TODO
+    # Listing events with a certain custom filtering for certain people: TODO
+    # Delete a certain event (only by an owner of event or administrator): TODO
+    # BUG: When creating an event - owner is a nested field - have to create
+
     queryset = Event.objects.all()
     serializer_class = EventSerializer
-    authentication_classes = [OAuth2Authentication, SocialAuthentication, ]
-    # permission_classes = [TokenHasScope]
-    # required_scopes = ['groups']
+    authentication_classes = [ExpiringTokenAuthenticationSystem]
+    permission_classes = [IsAuthenticated]
 
-    def list(self, request, *args, **kwargs):
-        user = request.user
-        social = user.social_auth.get(provider='facebook')
-        print social.extra_data['access_token']
-        response = requests.get('https://graph.facebook.com/v2.5/me', data=
-        {
-            'access_token': social.extra_data['access_token'],
-            'fields': 'email'
-        }
-                                )
-        print response.content
-        return super(EventViewSet, self).list(request, *args, **kwargs)
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        print serializer.get_initial
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def destroy(self, request, *args, **kwargs):
+        # Check if the person requesting to delete the instance is authenticated
+        # Check if the requestor is the owner of instance or an admin, if neither - STOP ACTION
+        # If owner or admin, delete the instance.
+        instance = self.get_object()
+        # print request.user
+        # print instance.owner
+        if request.user == instance.owner or request.user.is_staff:
+            self.perform_destroy(instance)
+            response = status.HTTP_204_NO_CONTENT
+        else:
+            response = status.HTTP_400_BAD_REQUEST
+        # self.perform_destroy(instance)
+        return Response(status=response)
 
 
 class LocationViewSet(viewsets.ModelViewSet):
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
+
+
+class ParticipantViewSet(viewsets.ModelViewSet):
+    queryset = Participant.objects.all()
+    serializer_class = ParticipantSerializer
+    authentication_classes = [ExpiringTokenAuthenticationSystem]
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        data = request.data.copy()
+        data.update({'account': request.auth.user.id})
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 

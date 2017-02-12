@@ -75,3 +75,6 @@ class AuthTests(APITestCase):
                                    Authorization='Bearer facebook CAACEdEose0cBAPoA8WIfgZBrPFvwfXb1REUC7BoRfFlmW4ZCKiLmuOVujoYiY6GXmHVovfMR9P9UP5t5BdiGSmZBltB1ye7oCCmZBqd5jYuCYMyDm39oUmAYO5Hxqhwd9RvoyvZBb9NGicoZC4I6DaLIZBjjuRkrhczIfnmbox0geaVNlFoP93OBIWRZCP9TLfIVOjhuNRZBFabgbzM3dU00S',
                                    )
         print response.content
+
+    def test_create_account(self):
+        pass

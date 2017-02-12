@@ -1,3 +1,5 @@
+import uuid as uuid
+
 from django.db import models
 
 from backend.apps.crm.models import Account
@@ -5,7 +7,7 @@ from backend.apps.hashtags.models import Hashtag
 
 
 class Event(models.Model):
-    uuid = models.UUIDField(primary_key=True, editable=False)
+    uuid = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
     name = models.CharField(max_length=100)
     capacity = models.IntegerField()
     description = models.TextField()
@@ -18,8 +20,20 @@ class Event(models.Model):
     end_time = models.DateTimeField(null=False)
 
 
-class Participants(models.Model):
-    uuid = models.UUIDField(primary_key=True, editable=False)
+class FacebookEvent(models.Model):
+    description = models.TextField(blank=True)
+    name = models.CharField(max_length=100)
+    id = models.BigIntegerField(primary_key=True)
+    start_time = models.DateTimeField(null=True, blank=True)
+    end_time = models.DateTimeField(null=True, blank=True)
+    place = models.ForeignKey('Place', null=True)
+    attending_count = models.IntegerField(null=False, blank=True, default=0)
+    timezone = models.CharField(max_length=50, null=True)
+    updated_time = models.DateTimeField(null=True, blank=True)
+
+
+class Participant(models.Model):
+    uuid = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
     event = models.ForeignKey(Event)
     account = models.ForeignKey(Account)
 
@@ -39,6 +53,11 @@ class Location(models.Model):
     longitude = models.FloatField(null=False)
     latitude = models.FloatField(null=False)
     state = models.CharField(max_length=50, null=True)
+
+
+class Place(models.Model):
+    name = models.CharField(max_length=100)
+    location = models.ForeignKey('Location')
 
 # class Rule(models.Model):
 #     name = models.CharField(max_length=20)

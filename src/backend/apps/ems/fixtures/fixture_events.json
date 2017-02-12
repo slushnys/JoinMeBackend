@@ -1,0 +1,32 @@
+[
+  {
+    "model": "ems.Event",
+    "fields": {
+      "name": "First test event",
+      "capacity": 50,
+      "description": "A new event",
+      "status": 1,
+      "location": null,
+      "owner": null,
+      "created": "2016-07-11T17:13:00+00:00",
+      "modified": null,
+      "begin_time": "2016-07-16T17:13:00+00:00",
+      "end_time": "2016-07-16T17:15:00+00:00"
+    }
+  },
+  {
+    "model": "ems.Event",
+    "fields": {
+      "name": "Pool game",
+      "capacity": 25,
+      "description": "Very cool pool game",
+      "status": 1,
+      "owner": null,
+      "location": null,
+      "created": "2016-07-11T17:13:00+00:00",
+      "modified": null,
+      "begin_time": "2016-07-16T17:13:00+00:00",
+      "end_time": "2016-07-16T17:15:00+00:00"
+    }
+  }
+]

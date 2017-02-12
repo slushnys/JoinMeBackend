@@ -1,0 +1,25 @@
+[
+  {
+    "model": "crm.Account",
+    "fields": {
+      "first_name": "Test",
+      "last_name": "User",
+      "name": "Test User",
+      "birthday": "1991-05-02",
+      "gender": "female",
+      "email": "test@socable.com",
+      "username": "test@socable.com",
+      "date_joined": "2016-07-11T17:13:00+00:00"
+    }
+  },
+  {
+    "model": "crm.FacebookAuthentication",
+    "fields": {
+      "access_token": "EAACvuLfpS4ABANotAvp6n0qkbaSliGxH5493ks81zLygjsENb9UffLDYwtS31ywYJMreqMveAH45S91npIG43y8ZBetIBbZCNLGUDyVVZAZB97NQQGH1GhzDLdPcoIt6KWCpXFZA0JlTvaWwTS8ertnh5F5JfTewZD",
+      "user": 1,
+      "userid": "1050188801844",
+      "expires": "5141099",
+      "long_lived_access_token": "EAACvuLfpS4ABANotAvp6n0qkbaSliGxH5493ks81zLygjsENb9UffLDYwtS31ywYJMreqMveAH45S91npIG43y8ZBetIBbZCNLGUDyVVZAZB97NQQGH1GhzDLdPcoIt6KWCpXFZA0JlTvaWwTS8ertnh5F5JfTewZD"
+    }
+  }
+]
